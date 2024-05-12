@@ -2,11 +2,9 @@ const Service = require('../models/serviceModel')
 
 const createService = async (req, res) => {
     try {
-        const { title, description, short, meta_title, meta_description, meta_keywords, slug, posted_date } = req.body
+        const { title, description, short, icon, meta_title, meta_description, meta_keywords, slug, posted_date } = req.body
         const image = req.file ? req.file.path : null;
-        const thumbnail = req.fileThumbnail ? req.fileThumbnail.path : null;
 
-        // Generate current date/time in a specific format
         const currentDate = new Date();
         const options = {
             year: 'numeric', month: 'short', day: 'numeric',
@@ -14,7 +12,7 @@ const createService = async (req, res) => {
             hour12: false, timeZone: 'UTC' // Customize options as per your requirement
         };
         const formattedDate = currentDate.toLocaleString('en-US', options);
-        const service = new Service({ title, description, image, thumbnail, short, slug, posted_date: formattedDate })
+        const service = new Service({ title, description, image, icon, short, meta_title, meta_description, meta_keywords, slug, posted_date: formattedDate })
         await service.save()
         res.status(201).json(service)
     } catch (error) {
@@ -54,10 +52,9 @@ const getService = async (req, res) => {
 
 const updateService = async (req, res) => {
     try {
-        const { title, description, meta_title, meta_description, meta_keywords } = req.body;
+        const { title, description, icon, short, meta_title, meta_description, meta_keywords } = req.body;
         const image = req.file ? req.file.path : null;
-        const thumbnail = req.fileThumbnail ? req.fileThumbnail.path : null;
-        const service = await Service.findOneAndUpdate({ slug: req.params.slug }, { title, description, image, thumbnail, meta_title, meta_description, meta_keywords }, { new: true });
+        const service = await Service.findOneAndUpdate({ slug: req.params.slug }, { title, description, image, icon, short, meta_title, meta_description, meta_keywords }, { new: true });
         if (!service) {
             return res.status(404).json({ message: 'Service not found' });
         }

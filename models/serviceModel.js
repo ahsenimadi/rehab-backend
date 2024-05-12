@@ -4,7 +4,7 @@ const serviceSchema = new mongoose.Schema({
     title: String,
     description: String,
     image: String,
-    thumbnail: String,
+    icon: String,
     short: String,
     meta_title: String,
     meta_description: String,
